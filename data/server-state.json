@@ -1,0 +1,85 @@
+{
+  "char_1_image": "img/01.jpeg",
+  "char_1_bonds": [
+    {
+      "id": 2,
+      "name": "Yuki Asakura",
+      "lvl": 0
+    },
+    {
+      "id": 3,
+      "name": "Tetsuya Mori",
+      "lvl": 1
+    },
+    {
+      "id": 4,
+      "name": "Sora Minamoto",
+      "lvl": 0
+    },
+    {
+      "id": 5,
+      "name": "Ren Kurosawa",
+      "lvl": 0
+    },
+    {
+      "id": 6,
+      "name": "Akemi Tanaka",
+      "lvl": 0
+    },
+    {
+      "id": 7,
+      "name": "Izumi Hana",
+      "lvl": 1
+    },
+    {
+      "id": 8,
+      "name": "Kaito Fujimoto",
+      "lvl": 0
+    },
+    {
+      "id": 9,
+      "name": "Minase Oboro",
+      "lvl": 0
+    },
+    {
+      "id": 10,
+      "name": "Satsuki Midori",
+      "lvl": 0
+    },
+    {
+      "id": 11,
+      "name": "Hiroto Kazama",
+      "lvl": 0
+    },
+    {
+      "id": 12,
+      "name": "Nao Tsukimura",
+      "lvl": 0
+    },
+    {
+      "id": 13,
+      "name": "Daiki Sugimoto",
+      "lvl": 0
+    },
+    {
+      "id": 14,
+      "name": "Chitose Arima",
+      "lvl": 0
+    },
+    {
+      "id": 15,
+      "name": "Ryusei Hanamura",
+      "lvl": 0
+    },
+    {
+      "id": 16,
+      "name": "Hana Mitsuru",
+      "lvl": 0
+    }
+  ],
+  "char_1_status": {
+    "pv": 40,
+    "ps": 40,
+    "coins": 0
+  }
+}
