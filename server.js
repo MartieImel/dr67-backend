@@ -2,23 +2,45 @@ import { createServer } from 'http';
 import { mkdir, readFile, writeFile, access } from 'fs/promises';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { Pool } from 'pg';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = `${__dirname}/data`;
 const DATA_FILE = `${DATA_DIR}/server-state.json`;
 const PORT = process.env.PORT || 3000;
 const clients = new Set();
+const USE_DB = Boolean(process.env.DATABASE_URL);
+let pool = null;
+let dbInitPromise = null;
 
-async function ensureDataFile() {
-  try {
-    await access(DATA_FILE);
-  } catch {
-    await mkdir(DATA_DIR, { recursive: true });
-    await writeFile(DATA_FILE, JSON.stringify({}, null, 2), 'utf8');
+async function ensureDb() {
+  if (!USE_DB) return;
+  if (!dbInitPromise) {
+    pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+    });
+    dbInitPromise = pool.query(`
+      CREATE TABLE IF NOT EXISTS dng67_state (
+        key TEXT PRIMARY KEY,
+        value JSONB NOT NULL
+      )
+    `);
   }
+  await dbInitPromise;
 }
 
 async function loadData() {
+  if (USE_DB) {
+    await ensureDb();
+    const res = await pool.query('SELECT key, value FROM dng67_state');
+    const result = {};
+    for (const row of res.rows) {
+      result[row.key] = row.value;
+    }
+    return result;
+  }
+
   await ensureDataFile();
   const raw = await readFile(DATA_FILE, 'utf8');
   try {
@@ -29,6 +51,28 @@ async function loadData() {
 }
 
 async function saveData(data) {
+  if (USE_DB) {
+    await ensureDb();
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      for (const [key, value] of Object.entries(data)) {
+        await client.query(
+          `INSERT INTO dng67_state (key, value) VALUES ($1, $2)
+           ON CONFLICT (key) DO UPDATE SET value = $2`,
+          [key, value]
+        );
+      }
+      await client.query('COMMIT');
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
+    return;
+  }
+
   await ensureDataFile();
   await writeFile(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
 }
