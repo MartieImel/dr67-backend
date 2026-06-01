@@ -1,0 +1,22 @@
+{
+  "name": "danganronpa-67-unified",
+  "version": "1.0.0",
+  "description": "Danganronpa RPG — Turma 67",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "dev":     "vite",
+    "start":   "vite",
+    "build":   "vite build",
+    "preview": "vite preview",
+    "server":  "node server.js"
+  },
+  "dependencies": {
+    "react":     "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite":                 "^5.4.2"
+  }
+}
